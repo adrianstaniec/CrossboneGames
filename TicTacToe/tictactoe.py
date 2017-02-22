@@ -80,7 +80,7 @@ while True:
             if event.key == pygame.K_q:
                 pygame.quit()
                 exit(0)
-            if event.key == pygame.K_SPACE:
+            if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
                 mark = True
             elif event.key == pygame.K_LEFT or event.key == pygame.K_h:
                 vector = (-1, 0)
