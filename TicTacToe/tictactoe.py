@@ -29,10 +29,12 @@ def mark_spot(player, cursor_pos):
     return player
 
 def check_status(matrix):
+    # horizontals
     for row in range(3):
         if matrix[row][0] == matrix[row][1]:
             if (matrix[row][1] == matrix[row][2]):
                 return matrix[row][0]
+    # verticals
     for col in range(3):
         if matrix[0][col] == matrix[1][col]:
             if (matrix[1][col] == matrix[2][col]):
@@ -44,6 +46,15 @@ def check_status(matrix):
     if matrix[2][0] == matrix[1][1]:
         if matrix[1][1] == matrix[0][2]:
             return matrix[1][1]
+    # draw
+    occupied = 0
+    for row in range(3):
+        for col in range(3):
+            if matrix[row][col]:
+                occupied += 1
+    if occupied == 9:
+        return 3
+    # still playing
     return 0
 
 pygame.init()
@@ -95,7 +106,12 @@ while True:
                 player = mark_spot(player, cursor_pos)
                 status = check_status(matrix)
                 if status != 0:
-                    screen.blit(ends[player-1],(0,0))
+                    screen.fill(0) #clear screen
+                    if status == 3:
+                        screen.blit(ends[0],(0,0))
+                        screen.blit(ends[1],(0,0))
+                    else:
+                        screen.blit(ends[player-1],(0,0))
                     pygame.display.flip() #update screen
                     sleep(1)
                     exit(0)
