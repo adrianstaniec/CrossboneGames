@@ -2,6 +2,20 @@ from time import sleep
 import pygame
 import numpy as np
 
+player = 0
+cursor_pos=np.array([1,1])
+matrix = [[0,0,0],
+          [0,0,0],
+          [0,0,0]]
+
+board = pygame.image.load("resources/board.png")
+ends = [pygame.image.load("resources/end0.png"),
+        pygame.image.load("resources/end1.png")]
+markers = [pygame.image.load("resources/marker0.png"),
+        pygame.image.load("resources/marker1.png")]
+cursors = [pygame.image.load("resources/cursor0.png"),
+        pygame.image.load("resources/cursor1.png")]
+
 def draw_board(matrix):
     for x in range(3):
         for y in range(3):
@@ -61,21 +75,6 @@ pygame.init()
 WIDTH, HEIGHT = 600, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 
-board = pygame.image.load("resources/board.png")
-ends = [pygame.image.load("resources/end0.png"),
-        pygame.image.load("resources/end1.png")]
-markers = [pygame.image.load("resources/marker0.png"),
-        pygame.image.load("resources/marker1.png")]
-cursors = [pygame.image.load("resources/cursor0.png"),
-        pygame.image.load("resources/cursor1.png")]
-
-player = 0
-
-cursor_pos=np.array([1,1])
-
-matrix = [[0,0,0],
-          [0,0,0],
-          [0,0,0]]
 
 while True:
     screen.fill(0) #clear screen
