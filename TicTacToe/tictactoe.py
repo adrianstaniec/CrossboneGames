@@ -2,19 +2,15 @@ from time import sleep
 import pygame
 import numpy as np
 
+from backend import model
 
-NOONE = 0
-PLAYER1 = 1
-PLAYER2 = 2
-DRAW = 3
 
 class State:
-# current player
-    player = PLAYER1
+    player = model.PLAYER1
     cursor = (1, 1)
-    matrix = [[NOONE, NOONE, NOONE],
-              [NOONE, NOONE, NOONE],
-              [NOONE, NOONE, NOONE]]
+    matrix = [[model.NOONE, model.NOONE, model.NOONE],
+              [model.NOONE, model.NOONE, model.NOONE],
+              [model.NOONE, model.NOONE, model.NOONE]]
 
 class View:
     SIZE = 600
@@ -55,63 +51,6 @@ class View:
         pygame.quit()
         exit(0)
 
-class Model:
-    @staticmethod
-    def move_cursor(pos, vec):
-        pos = np.array(pos)
-        vec = np.array(vec)
-        new_pos = pos + vec
-        if new_pos[0] >= 0 and new_pos[0] <= 2:
-            if new_pos[1] >= 0 and new_pos[1] <= 2:
-                return tuple(new_pos)
-        return tuple(pos)
-
-    @staticmethod
-    def change_player(player):
-            if player == PLAYER1:
-                return PLAYER2
-            else:
-                return PLAYER1
-
-    @staticmethod
-    def mark_spot(matrix, player, cursor):
-        x = cursor[0]
-        y = cursor[1]
-        if matrix[x][y] == 0:
-            matrix[x][y] = player
-            player = Model.change_player(player)
-        return (matrix, player)
-
-    @staticmethod
-    def check_winner(matrix):
-        # horizontals
-        for row in range(3):
-            if matrix[row][0] == matrix[row][1]:
-                if matrix[row][1] == matrix[row][2]:
-                    return matrix[row][0]
-        # verticals
-        for col in range(3):
-            if matrix[0][col] == matrix[1][col]:
-                if matrix[1][col] == matrix[2][col]:
-                    return matrix[0][col]
-        # diagonals
-        if matrix[0][0] == matrix[1][1]:
-            if matrix[1][1] == matrix[2][2]:
-                return matrix[1][1]
-        if matrix[2][0] == matrix[1][1]:
-            if matrix[1][1] == matrix[0][2]:
-                return matrix[1][1]
-        # draw
-        num_marks = 0
-        for row in range(3):
-            for col in range(3):
-                if matrix[row][col]:
-                    num_marks += 1
-        if num_marks == 9:
-            return DRAW
-        # still playing
-        return NOONE
-
 
 if __name__ == "__main__":
     state = State()
@@ -124,19 +63,19 @@ if __name__ == "__main__":
             if event.type == pygame.KEYDOWN:
 
                 if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
-                    view.game_over(NOONE)
+                    view.game_over(model.NOONE)
 
                 if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
-                    state.matrix, state.player = Model.mark_spot(state.matrix, state.player, state.cursor)
-                    winner = Model.check_winner(state.matrix)
-                    if winner != NOONE:
+                    state.matrix, state.player = model.mark_spot(state.matrix, state.player, state.cursor)
+                    winner = model.check_winner(state.matrix)
+                    if winner != model.NOONE:
                         view.game_over(winner)
 
                 if event.key == pygame.K_LEFT or event.key == pygame.K_h:
-                    state.cursor = Model.move_cursor(state.cursor, (-1, 0))
+                    state.cursor = model.move_cursor(state.cursor, (-1, 0))
                 if event.key == pygame.K_DOWN or event.key == pygame.K_j:
-                    state.cursor = Model.move_cursor(state.cursor, (0, 1))
+                    state.cursor = model.move_cursor(state.cursor, (0, 1))
                 if event.key == pygame.K_UP or event.key == pygame.K_k:
-                    state.cursor = Model.move_cursor(state.cursor, (0, -1))
+                    state.cursor = model.move_cursor(state.cursor, (0, -1))
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_l:
-                    state.cursor = Model.move_cursor(state.cursor, (1, 0))
+                    state.cursor = model.move_cursor(state.cursor, (1, 0))
