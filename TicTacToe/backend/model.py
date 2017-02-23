@@ -1,5 +1,3 @@
-from time import sleep
-import pygame
 import numpy as np
 
 

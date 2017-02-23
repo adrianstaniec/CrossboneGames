@@ -1,8 +1,13 @@
+"""TicTacToe.
+"""
+
 from time import sleep
 import pygame
-import numpy as np
+from docopt import docopt
+import argparse
 
 from backend import model
+from backend import ai
 
 
 class State:
@@ -53,6 +58,20 @@ class View:
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-l", "--level", type=int,
+                        help="run in single player mode on difficulty level [1-2]")
+    args = parser.parse_args()
+
+    single_player = False
+    bot = None
+    if args.level:
+        single_player = True
+        if args.level == 1:
+            bot = ai.AI1()
+        else:
+            bot = ai.AI2()
+
     state = State()
     view = View()
 
@@ -70,6 +89,11 @@ if __name__ == "__main__":
                     winner = model.check_winner(state.matrix)
                     if winner != model.NOONE:
                         view.game_over(winner)
+                    if single_player and state.player == model.PLAYER2:
+                        state.matrix, state.player = bot.mark_spot(state.matrix, state.player)
+                        winner = model.check_winner(state.matrix)
+                        if winner != model.NOONE:
+                            view.game_over(winner)
 
                 if event.key == pygame.K_LEFT or event.key == pygame.K_h:
                     state.cursor = model.move_cursor(state.cursor, (-1, 0))
