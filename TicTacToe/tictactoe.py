@@ -10,23 +10,15 @@ from backend import model
 from backend import ai
 
 
-class State:
-    def __init__(self):
-        self.player = model.PLAYER1
-        self.cursor = (1, 1)
-        self.matrix = [[model.NOONE, model.NOONE, model.NOONE],
-                       [model.NOONE, model.NOONE, model.NOONE],
-                       [model.NOONE, model.NOONE, model.NOONE]]
-
 class View:
     SIZE = 600
     board = pygame.image.load("resources/board.png")
-    ends = [pygame.image.load("resources/end0.png"),
-            pygame.image.load("resources/end1.png")]
-    markers = [pygame.image.load("resources/marker0.png"),
-               pygame.image.load("resources/marker1.png")]
-    cursors = [pygame.image.load("resources/cursor0.png"),
-               pygame.image.load("resources/cursor1.png")]
+    ends = {'X' : pygame.image.load("resources/end_X.png"),
+            'O' : pygame.image.load("resources/end_O.png")}
+    markers = {'X' : pygame.image.load("resources/marker_X.png"),
+               'O' : pygame.image.load("resources/marker_O.png")}
+    cursors = {'X' : pygame.image.load("resources/cursor_X.png"),
+               'O' : pygame.image.load("resources/cursor_O.png")}
 
     def __init__(self):
         pygame.init()
@@ -37,24 +29,24 @@ class View:
         self.screen.blit(self.board, (0, 0))
         for x in range(3):
             for y in range(3):
-                if matrix[x][y] != 0:
-                    self.screen.blit(self.markers[matrix[x][y]-1],
+                if matrix[x][y] != model.EMPTY:
+                    self.screen.blit(self.markers[matrix[x][y]],
                                      (30+200*y, 30+200*x))
         x = cursor[0]
         y = cursor[1]
-        self.screen.blit(self.cursors[player-1], (30+200*y, 30+200*x))
+        self.screen.blit(self.cursors[player], (30+200*y, 30+200*x))
         pygame.display.flip() #update screen
 
     def game_over(self, winner):
         self.screen.fill(0)
-        if winner == 1 or winner == 2:
-            self.screen.blit(self.ends[winner-1], (0, 0))
+        if winner == model.PLAYER1 or winner == model.PLAYER2:
+            self.screen.blit(self.ends[winner], (0, 0))
         else:
-            self.screen.blit(self.ends[0], (0, 0))
-            self.screen.blit(self.ends[1], (0, 0))
+            self.screen.blit(self.ends[model.PLAYER1], (0, 0))
+            self.screen.blit(self.ends[model.PLAYER2], (0, 0))
         pygame.display.flip() #update screen
         sleep(1)
-        return State()
+        return model.State()
 
     def quit_game(self):
         pygame.quit()
@@ -72,9 +64,9 @@ if __name__ == "__main__":
 
     if args.level:
         single_player = True
-        bot = ai.AFactory(args.level)
+        bot = ai.Factory(args.level)
 
-    state = State()
+    state = model.State()
     view = View()
 
     while True:

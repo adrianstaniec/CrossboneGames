@@ -7,7 +7,7 @@ NUM = 7
 def first_empty_slot(matrix, player):
     for y in range(3):
         for x in range(3):
-            if matrix[x][y] == 0:
+            if matrix[x][y] == model.EMPTY:
                 matrix[x][y] = player
                 return (matrix, model.opponent(player))
 
@@ -16,7 +16,7 @@ def random_spot(matrix, player):
         guess = randrange(9)
         x = guess // 3
         y = guess % 3
-        if matrix[x][y] == 0:
+        if matrix[x][y] == model.EMPTY:
             matrix[x][y] = player
             return (matrix, model.opponent(player))
 
@@ -24,7 +24,7 @@ def complete(line, player):
     done = False
     line = list(line)
     num_player_spots = line.count(player)
-    num_free_spots = line.count(model.NOONE)
+    num_free_spots = line.count(model.EMPTY)
     if  num_player_spots == 2 and num_free_spots == 1:
         line = 3 * [player]
         done = True
@@ -34,9 +34,9 @@ def block(line, player):
     done = False
     line = list(line)
     num_opponent_spots = line.count(model.opponent(player))
-    num_free_spots = line.count(model.NOONE)
+    num_free_spots = line.count(model.EMPTY)
     if  num_opponent_spots == 2 and num_free_spots == 1:
-        line = [player if spot == model.NOONE else spot
+        line = [player if spot == model.EMPTY else spot
                 for spot in line]
         done = True
     return done, line
@@ -107,7 +107,7 @@ def defend_in_1(matrix, player):
         return matrix, opponent
 
 def take_center(matrix, player):
-    if matrix[1,1] == model.NOONE:
+    if matrix[1,1] == model.EMPTY:
         matrix[1,1] = player
         return matrix, model.opponent(player)
     return matrix, player
@@ -116,7 +116,7 @@ def take_corner(matrix, player):
     opponent = model.opponent(player)
     for row in [0,2]:
         for col in [0,2]:
-            if matrix[row,col] == model.NOONE:
+            if matrix[row,col] == model.EMPTY:
                 if matrix[row,1] == opponent or matrix[1,col] == opponent:
                     matrix[row,col] = player
                     return matrix, opponent
@@ -125,12 +125,12 @@ def take_corner(matrix, player):
 def take_side(matrix, player):
     opponent = model.opponent(player)
     for row, col in [(0, 1), (2, 1)]:
-        if matrix[row,col] == model.NOONE:
+        if matrix[row,col] == model.EMPTY:
             if matrix[row,0] == opponent or matrix[row,2] == opponent:
                 matrix[row,col] = player
                 return matrix, opponent
     for row, col in [(1, 0), (1, 2)]:
-        if matrix[row,col] == model.NOONE:
+        if matrix[row,col] == model.EMPTY:
             if matrix[0,col] == opponent or matrix[2,col] == opponent:
                 matrix[row,col] = player
                 return matrix, opponent
@@ -234,6 +234,6 @@ class AI6:
 
         return random_spot(matrix, player)
 
-def AiFactory(level):
+def Factory(level):
     factory = [AI0, AI1, AI2, AI3, AI4, AI5, AI6]
     return factory[level]()
