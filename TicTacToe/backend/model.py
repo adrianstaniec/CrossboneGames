@@ -30,7 +30,6 @@ def mark_spot(matrix, player, cursor):
     return (matrix, player)
 
 def check_winner(matrix):
-    print(matrix)
     # horizontals
     for row in range(3):
         if matrix[row][0] == matrix[row][1]:

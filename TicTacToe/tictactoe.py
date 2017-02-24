@@ -11,11 +11,12 @@ from backend import ai
 
 
 class State:
-    player = model.PLAYER1
-    cursor = (1, 1)
-    matrix = [[model.NOONE, model.NOONE, model.NOONE],
-              [model.NOONE, model.NOONE, model.NOONE],
-              [model.NOONE, model.NOONE, model.NOONE]]
+    def __init__(self):
+        self.player = model.PLAYER1
+        self.cursor = (1, 1)
+        self.matrix = [[model.NOONE, model.NOONE, model.NOONE],
+                       [model.NOONE, model.NOONE, model.NOONE],
+                       [model.NOONE, model.NOONE, model.NOONE]]
 
 class View:
     SIZE = 600
@@ -53,9 +54,11 @@ class View:
             self.screen.blit(self.ends[1], (0, 0))
         pygame.display.flip() #update screen
         sleep(1)
+        return State()
+
+    def quit_game(self):
         pygame.quit()
         exit(0)
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -83,21 +86,27 @@ if __name__ == "__main__":
         view.draw_board(state.matrix, state.player, state.cursor)
 
         event = pygame.event.poll()
+
+        if event.type == pygame.QUIT:
+            break
+
         if event.type == pygame.KEYDOWN:
 
             if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
-                view.game_over(model.NOONE)
+                break
 
             if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
                 state.matrix, state.player = model.mark_spot(state.matrix, state.player, state.cursor)
                 winner = model.check_winner(state.matrix)
                 if winner != model.NOONE:
-                    view.game_over(winner)
+                    state = view.game_over(winner)
+                    continue
                 if single_player and state.player == model.PLAYER2:
                     state.matrix, state.player = bot.mark_spot(state.matrix, state.player)
                     winner = model.check_winner(state.matrix)
                     if winner != model.NOONE:
-                        view.game_over(winner)
+                        state = view.game_over(winner)
+                        continue
 
             if event.key == pygame.K_LEFT or event.key == pygame.K_h:
                 state.cursor = model.move_cursor(state.cursor, (0, -1))
@@ -107,3 +116,5 @@ if __name__ == "__main__":
                 state.cursor = model.move_cursor(state.cursor, (-1, 0))
             if event.key == pygame.K_RIGHT or event.key == pygame.K_l:
                 state.cursor = model.move_cursor(state.cursor, (0, 1))
+
+    view.quit_game()
