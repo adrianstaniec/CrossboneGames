@@ -41,68 +41,69 @@ def block(line, player):
     return done, line
 
 def win_in_1(matrix, player):
-        opponent = model.opponent(player)
-        """Seize opportinity to win in 1 move, otherwise random"""
-        done = False
-        opponent = model.opponent(player)
-        # = horizontals
-        for row in range(3):
-            if not done:
-                done, line = complete(matrix[row,:], player)
-                if done:
-                    matrix[row,:] = line
-        # || verticals
-        for col in range(3):
-            if not done:
-                done, line = complete(matrix[:,col], player)
-                if done:
-                    matrix[:,col] = line
+    opponent = model.opponent(player)
+    """Seize opportinity to win in 1 move, otherwise random"""
+    done = False
+    opponent = model.opponent(player)
+    # = horizontals
+    for row in range(3):
         if not done:
-            # \ diagonal
-            done, line = complete(matrix.diagonal(), player)
+            done, line = complete(matrix[row,:], player)
             if done:
-                matrix[np.diag_indices(3)] = line
+                matrix[row,:] = line
+                # || verticals
+    for col in range(3):
         if not done:
-            # / diagonal
-            done, line = complete(np.fliplr(matrix).diagonal(), player)
+            done, line = complete(matrix[:,col], player)
             if done:
-                np.fliplr(matrix)[np.diag_indices(3)] = line
+                matrix[:,col] = line
+    if not done:
+        # \ diagonal
+        done, line = complete(matrix.diagonal(), player)
+        if done:
+            matrix[np.diag_indices(3)] = line
+    if not done:
+        # / diagonal
+        done, line = complete(np.fliplr(matrix).diagonal(), player)
+        if done:
+            np.fliplr(matrix)[np.diag_indices(3)] = line
 
-        if not done:
-            return matrix, player
-        else:
-            return matrix, opponent
+    if not done:
+        return matrix, player
+    else:
+        return matrix, opponent
 
 def defend_in_1(matrix, player):
-        """Block if opponent has an opportinity to win in 1 move"""
-        done = False
-        opponent = model.opponent(player)
-        # = horizontals
-        for row in range(3):
-            if not done:
-                done, line = block(matrix[row,:], player)
-                if done:
-                    matrix[row,:] = line
-        # || verticals
-        for col in range(3):
-            if not done:
-                done, line = block(matrix[:,col], player)
-                if done:
-                    matrix[:,col] = line
+    """Block if opponent has an opportinity to win in 1 move"""
+    done = False
+    opponent = model.opponent(player)
+    # = horizontals
+    for row in range(3):
         if not done:
-            # \ diagonal
-            done, line = block(matrix.diagonal(), player)
+            done, line = block(matrix[row,:], player)
             if done:
-                matrix[np.diag_indices(3)] = line
+                matrix[row,:] = line
+                # || verticals
+    for col in range(3):
         if not done:
-            # / diagonal
-            done, line = block(np.fliplr(matrix).diagonal(), player)
+            done, line = block(matrix[:,col], player)
             if done:
-                np.fliplr(matrix)[np.diag_indices(3)] = line
-        if not done:
-            return matrix, player
-        else:
-            return matrix, opponent
+                matrix[:,col] = line
+    if not done:
+        # \ diagonal
+        done, line = block(matrix.diagonal(), player)
+        if done:
+            matrix[np.diag_indices(3)] = line
+    if not done:
+        # / diagonal
+        done, line = block(np.fliplr(matrix).diagonal(), player)
+        if done:
+            np.fliplr(matrix)[np.diag_indices(3)] = line
+    if not done:
+        return matrix, player
+    else:
+        return matrix, opponent
+
 
 class AI1:
     def mark_spot(self, matrix, player):
