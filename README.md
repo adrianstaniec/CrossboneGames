@@ -25,6 +25,6 @@ AI3 (defend in 1)        | :white_check_mark:
 AI4 (center preference)  | :white_check_mark:
 AI5 (corner preference)  | :white_check_mark:
 AI6 (side preference)    | :white_check_mark:
-AI competition           | :x:
+AI competition           | :white_check_mark:
 AI7 (supervised)         | :x:
 AI8 (reinforced)         | :x:
