@@ -82,28 +82,28 @@ if __name__ == "__main__":
     while True:
         view.draw_board(state.matrix, state.player, state.cursor)
 
-        for event in pygame.event.get():
-            if event.type == pygame.KEYDOWN:
+        event = pygame.event.poll()
+        if event.type == pygame.KEYDOWN:
 
-                if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
-                    view.game_over(model.NOONE)
+            if event.key == pygame.K_ESCAPE or event.key == pygame.K_q:
+                view.game_over(model.NOONE)
 
-                if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
-                    state.matrix, state.player = model.mark_spot(state.matrix, state.player, state.cursor)
+            if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
+                state.matrix, state.player = model.mark_spot(state.matrix, state.player, state.cursor)
+                winner = model.check_winner(state.matrix)
+                if winner != model.NOONE:
+                    view.game_over(winner)
+                if single_player and state.player == model.PLAYER2:
+                    state.matrix, state.player = bot.mark_spot(state.matrix, state.player)
                     winner = model.check_winner(state.matrix)
                     if winner != model.NOONE:
                         view.game_over(winner)
-                    if single_player and state.player == model.PLAYER2:
-                        state.matrix, state.player = bot.mark_spot(state.matrix, state.player)
-                        winner = model.check_winner(state.matrix)
-                        if winner != model.NOONE:
-                            view.game_over(winner)
 
-                if event.key == pygame.K_LEFT or event.key == pygame.K_h:
-                    state.cursor = model.move_cursor(state.cursor, (0, -1))
-                if event.key == pygame.K_DOWN or event.key == pygame.K_j:
-                    state.cursor = model.move_cursor(state.cursor, (1, 0))
-                if event.key == pygame.K_UP or event.key == pygame.K_k:
-                    state.cursor = model.move_cursor(state.cursor, (-1, 0))
-                if event.key == pygame.K_RIGHT or event.key == pygame.K_l:
-                    state.cursor = model.move_cursor(state.cursor, (0, 1))
+            if event.key == pygame.K_LEFT or event.key == pygame.K_h:
+                state.cursor = model.move_cursor(state.cursor, (0, -1))
+            if event.key == pygame.K_DOWN or event.key == pygame.K_j:
+                state.cursor = model.move_cursor(state.cursor, (1, 0))
+            if event.key == pygame.K_UP or event.key == pygame.K_k:
+                state.cursor = model.move_cursor(state.cursor, (-1, 0))
+            if event.key == pygame.K_RIGHT or event.key == pygame.K_l:
+                state.cursor = model.move_cursor(state.cursor, (0, 1))
