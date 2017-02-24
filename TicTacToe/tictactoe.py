@@ -69,8 +69,12 @@ if __name__ == "__main__":
         single_player = True
         if args.level == 1:
             bot = ai.AI1()
-        else:
+        if args.level == 2:
             bot = ai.AI2()
+        if args.level == 3:
+            bot = ai.AI3()
+        if args.level == 4:
+            bot = ai.AI4()
 
     state = State()
     view = View()

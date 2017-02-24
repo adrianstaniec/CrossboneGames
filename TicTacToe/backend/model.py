@@ -15,7 +15,7 @@ def move_cursor(pos, vec):
             return tuple(new_pos)
     return tuple(pos)
 
-def change_player(player):
+def opponent(player):
         if player == PLAYER1:
             return PLAYER2
         else:
@@ -26,10 +26,11 @@ def mark_spot(matrix, player, cursor):
     y = cursor[1]
     if matrix[x][y] == 0:
         matrix[x][y] = player
-        player = change_player(player)
+        player = opponent(player)
     return (matrix, player)
 
 def check_winner(matrix):
+    print(matrix)
     # horizontals
     for row in range(3):
         if matrix[row][0] == matrix[row][1]:
