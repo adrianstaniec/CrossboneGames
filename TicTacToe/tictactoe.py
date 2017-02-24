@@ -63,29 +63,16 @@ class View:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("-l", "--level", type=int,
-                        help="run in single player mode on difficulty level [1-7]")
+                        help=("run in single player mode on difficulty level"
+                              "[0-{}]").format(ai.NUM-1))
     args = parser.parse_args()
 
     single_player = False
     bot = None
 
-    # TODO: refactor to a list
     if args.level:
         single_player = True
-        if args.level == 1:
-            bot = ai.AI1()
-        if args.level == 2:
-            bot = ai.AI2()
-        if args.level == 3:
-            bot = ai.AI3()
-        if args.level == 4:
-            bot = ai.AI4()
-        if args.level == 5:
-            bot = ai.AI5()
-        if args.level == 6:
-            bot = ai.AI6()
-        if args.level == 7:
-            bot = ai.AI7()
+        bot = ai.AFactory(args.level)
 
     state = State()
     view = View()

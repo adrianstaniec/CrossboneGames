@@ -2,6 +2,7 @@ from random import randrange
 import numpy as np
 from backend import model
 
+NUM = 7
 
 def first_empty_slot(matrix, player):
     for y in range(3):
@@ -136,20 +137,34 @@ def take_side(matrix, player):
     return matrix, player
 
 
-class AI1:
+class AI0:
     def mark_spot(self, matrix, player):
-        return first_empty_slot()
+        return first_empty_slot(matrix, player)
 
-class AI2:
+class AI1:
     def mark_spot(self, matrix, player):
         return random_spot(matrix, player)
 
-class AI3:
+class AI2:
     def mark_spot(self, matrix, player):
         matrix = np.array(matrix)
         new_matrix, new_player = win_in_1(matrix, player)
         if new_player != player:
             return new_matrix, new_player
+        return random_spot(matrix, player)
+
+class AI3:
+    def mark_spot(self, matrix, player):
+        matrix = np.array(matrix)
+
+        new_matrix, new_player = win_in_1(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = defend_in_1(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
         return random_spot(matrix, player)
 
 class AI4:
@@ -161,6 +176,10 @@ class AI4:
             return new_matrix, new_player
 
         new_matrix, new_player = defend_in_1(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = take_center(matrix, player)
         if new_player != player:
             return new_matrix, new_player
 
@@ -182,31 +201,13 @@ class AI5:
         if new_player != player:
             return new_matrix, new_player
 
-        return random_spot(matrix, player)
-
-class AI6:
-    def mark_spot(self, matrix, player):
-        matrix = np.array(matrix)
-
-        new_matrix, new_player = win_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        new_matrix, new_player = defend_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        new_matrix, new_player = take_center(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
         new_matrix, new_player = take_corner(matrix, player)
         if new_player != player:
             return new_matrix, new_player
 
         return random_spot(matrix, player)
 
-class AI7:
+class AI6:
     def mark_spot(self, matrix, player):
         matrix = np.array(matrix)
 
@@ -232,3 +233,7 @@ class AI7:
             return new_matrix, new_player
 
         return random_spot(matrix, player)
+
+def AiFactory(level):
+    factory = [AI0, AI1, AI2, AI3, AI4, AI5, AI6]
+    return factory[level]()
