@@ -38,10 +38,10 @@ class View:
             for y in range(3):
                 if matrix[x][y] != 0:
                     self.screen.blit(self.markers[matrix[x][y]-1],
-                                     (30+200*x, 30+200*y))
+                                     (30+200*y, 30+200*x))
         x = cursor[0]
         y = cursor[1]
-        self.screen.blit(self.cursors[player-1], (30+200*x, 30+200*y))
+        self.screen.blit(self.cursors[player-1], (30+200*y, 30+200*x))
         pygame.display.flip() #update screen
 
     def game_over(self, winner):
@@ -96,10 +96,10 @@ if __name__ == "__main__":
                             view.game_over(winner)
 
                 if event.key == pygame.K_LEFT or event.key == pygame.K_h:
-                    state.cursor = model.move_cursor(state.cursor, (-1, 0))
-                if event.key == pygame.K_DOWN or event.key == pygame.K_j:
-                    state.cursor = model.move_cursor(state.cursor, (0, 1))
-                if event.key == pygame.K_UP or event.key == pygame.K_k:
                     state.cursor = model.move_cursor(state.cursor, (0, -1))
-                if event.key == pygame.K_RIGHT or event.key == pygame.K_l:
+                if event.key == pygame.K_DOWN or event.key == pygame.K_j:
                     state.cursor = model.move_cursor(state.cursor, (1, 0))
+                if event.key == pygame.K_UP or event.key == pygame.K_k:
+                    state.cursor = model.move_cursor(state.cursor, (-1, 0))
+                if event.key == pygame.K_RIGHT or event.key == pygame.K_l:
+                    state.cursor = model.move_cursor(state.cursor, (0, 1))
