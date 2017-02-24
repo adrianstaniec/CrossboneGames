@@ -73,6 +73,7 @@ def win_in_1(matrix, player):
     else:
         return matrix, opponent
 
+# TODO: refactor: combine with win_in_1()
 def defend_in_1(matrix, player):
     """Block if opponent has an opportinity to win in 1 move"""
     done = False
@@ -104,6 +105,36 @@ def defend_in_1(matrix, player):
     else:
         return matrix, opponent
 
+def take_center(matrix, player):
+    if matrix[1,1] == model.NOONE:
+        matrix[1,1] = player
+        return matrix, model.opponent(player)
+    return matrix, player
+
+def take_corner(matrix, player):
+    opponent = model.opponent(player)
+    for row in [0,2]:
+        for col in [0,2]:
+            if matrix[row,col] == model.NOONE:
+                if matrix[row,1] == opponent or matrix[1,col] == opponent:
+                    matrix[row,col] = player
+                    return matrix, opponent
+    return matrix, player
+
+def take_side(matrix, player):
+    opponent = model.opponent(player)
+    for row, col in [(0, 1), (2, 1)]:
+        if matrix[row,col] == model.NOONE:
+            if matrix[row,0] == opponent or matrix[row,2] == opponent:
+                matrix[row,col] = player
+                return matrix, opponent
+    for row, col in [(1, 0), (1, 2)]:
+        if matrix[row,col] == model.NOONE:
+            if matrix[0,col] == opponent or matrix[2,col] == opponent:
+                matrix[row,col] = player
+                return matrix, opponent
+    return matrix, player
+
 
 class AI1:
     def mark_spot(self, matrix, player):
@@ -124,10 +155,80 @@ class AI3:
 class AI4:
     def mark_spot(self, matrix, player):
         matrix = np.array(matrix)
+
         new_matrix, new_player = win_in_1(matrix, player)
         if new_player != player:
             return new_matrix, new_player
+
         new_matrix, new_player = defend_in_1(matrix, player)
         if new_player != player:
             return new_matrix, new_player
+
+        return random_spot(matrix, player)
+
+class AI5:
+    def mark_spot(self, matrix, player):
+        matrix = np.array(matrix)
+
+        new_matrix, new_player = win_in_1(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = defend_in_1(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = take_center(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        return random_spot(matrix, player)
+
+class AI6:
+    def mark_spot(self, matrix, player):
+        matrix = np.array(matrix)
+
+        new_matrix, new_player = win_in_1(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = defend_in_1(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = take_center(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = take_corner(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        return random_spot(matrix, player)
+
+class AI7:
+    def mark_spot(self, matrix, player):
+        matrix = np.array(matrix)
+
+        # TODO: refactor to a list of functions
+        new_matrix, new_player = win_in_1(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = defend_in_1(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = take_center(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = take_corner(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
+        new_matrix, new_player = take_side(matrix, player)
+        if new_player != player:
+            return new_matrix, new_player
+
         return random_spot(matrix, player)

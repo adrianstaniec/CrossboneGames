@@ -22,7 +22,9 @@ AI1 (first empty)        | :white_check_mark:
 AI2 (random empty)       | :white_check_mark:
 AI3 (win in 1)           | :white_check_mark:
 AI4 (defend in 1)        | :white_check_mark:
+AI5 (center preference)  | :white_check_mark:
+AI6 (corner preference)  | :white_check_mark:
+AI7 (side preference)    | :white_check_mark:
 AI competition           | :x:
-AI5 (logical)            | :x:
-AI6 (supervised)         | :x:
-AI6 (reinforced)         | :x:
+AI8 (supervised)         | :x:
+AI9 (reinforced)         | :x:
