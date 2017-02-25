@@ -3,7 +3,6 @@
 
 from time import sleep
 import pygame
-from docopt import docopt
 import argparse
 
 from backend import model
@@ -13,12 +12,12 @@ from backend import ai
 class View:
     SIZE = 600
     board = pygame.image.load("resources/board.png")
-    ends = {'X' : pygame.image.load("resources/end_X.png"),
-            'O' : pygame.image.load("resources/end_O.png")}
-    markers = {'X' : pygame.image.load("resources/marker_X.png"),
-               'O' : pygame.image.load("resources/marker_O.png")}
-    cursors = {'X' : pygame.image.load("resources/cursor_X.png"),
-               'O' : pygame.image.load("resources/cursor_O.png")}
+    ends = {model.PLAYER_X : pygame.image.load("resources/end_X.png"),
+            model.PLAYER_O : pygame.image.load("resources/end_O.png")}
+    markers = {model.PLAYER_X : pygame.image.load("resources/marker_X.png"),
+               model.PLAYER_O : pygame.image.load("resources/marker_O.png")}
+    cursors = {model.PLAYER_X : pygame.image.load("resources/cursor_X.png"),
+               model.PLAYER_O : pygame.image.load("resources/cursor_O.png")}
 
     def __init__(self):
         pygame.init()
@@ -40,11 +39,11 @@ class View:
         pygame.display.flip() #update screen
 
     def game_over(self, winner):
-        if winner == model.PLAYER1 or winner == model.PLAYER2:
+        if winner == model.PLAYER_X or winner == model.PLAYER_O:
             self.screen.blit(self.ends[winner], (0, 0))
         else:
-            self.screen.blit(self.ends[model.PLAYER1], (0, 0))
-            self.screen.blit(self.ends[model.PLAYER2], (0, 0))
+            self.screen.blit(self.ends[model.PLAYER_X], (0, 0))
+            self.screen.blit(self.ends[model.PLAYER_O], (0, 0))
         pygame.display.flip() #update screen
         sleep(1)
 
@@ -65,10 +64,10 @@ if __name__ == "__main__":
         single_player = True
         bot = ai.Factory(args.level)
 
-    stats = {model.PLAYER1 : 0,
-             model.PLAYER2 : 0,
+    stats = {model.PLAYER_X : 0,
+             model.PLAYER_O : 0,
              model.DRAW : 0}
-    starting_player = model.PLAYER1
+    starting_player = model.PLAYER_X
 
     view = View()
 
@@ -91,7 +90,7 @@ if __name__ == "__main__":
                     break
 
                 if event.key == pygame.K_RETURN or event.key == pygame.K_SPACE:
-                    if state.player == model.PLAYER1 or not single_player:
+                    if state.player == model.PLAYER_X or not single_player:
                         state.matrix, state.player = model.mark_spot(state.matrix,
                                                                      state.player,
                                                                      state.cursor)
@@ -109,7 +108,7 @@ if __name__ == "__main__":
                 if event.key == pygame.K_RIGHT or event.key == pygame.K_l:
                     state.cursor = model.move_cursor(state.cursor, (0, 1))
 
-            if single_player and state.player == model.PLAYER2:
+            if single_player and state.player == model.PLAYER_O:
                 state.matrix, state.player = bot.mark_spot(state.matrix,
                                                            state.player)
                 state.winner = model.check_winner(state.matrix)

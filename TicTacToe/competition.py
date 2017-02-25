@@ -28,12 +28,12 @@ if __name__ == "__main__":
     for a in range(ai.NUM):
         for b in range(a+1):
             summary = match.play(a, b, NUM_GAMES)
-            strings[a,b] = "{}/{}".format(summary[model.PLAYER1], summary[model.PLAYER2])
-            charts[a][b] = [summary[model.PLAYER2]/NUM_GAMES,
-                            summary[model.PLAYER1]/NUM_GAMES,
+            strings[a,b] = "{}/{}".format(summary[model.PLAYER_X], summary[model.PLAYER_O])
+            charts[a][b] = [summary[model.PLAYER_O]/NUM_GAMES,
+                            summary[model.PLAYER_X]/NUM_GAMES,
                             summary[model.DRAW]/NUM_GAMES]
             try:
-                numbers[a,b] = summary[model.PLAYER1] / summary[model.PLAYER2]
+                numbers[a,b] = summary[model.PLAYER_X] / summary[model.PLAYER_O]
             except:
                 numbers[a,b] = float('Inf')
         for b in range(a+1, ai.NUM):

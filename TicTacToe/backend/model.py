@@ -2,18 +2,18 @@ import numpy as np
 
 
 EMPTY = NOONE = ' '
-PLAYER1 = 'X'
-PLAYER2 = 'O'
+PLAYER_X = 'x'
+PLAYER_O = 'o'
 DRAW = '='
 
 class State:
-    def __init__(self, player=PLAYER1):
+    def __init__(self, player=PLAYER_X):
         self.player = player
         self.winner = NOONE
-        self.cursor = (1, 1)
-        self.matrix = [[EMPTY, EMPTY, EMPTY],
-                       [EMPTY, EMPTY, EMPTY],
-                       [EMPTY, EMPTY, EMPTY]]
+        self.cursor = np.array([1, 1])
+        self.matrix = np.array([[EMPTY, EMPTY, EMPTY],
+                                [EMPTY, EMPTY, EMPTY],
+                                [EMPTY, EMPTY, EMPTY]])
 
 def move_cursor(pos, vec):
     pos = np.array(pos)
@@ -25,10 +25,10 @@ def move_cursor(pos, vec):
     return tuple(pos)
 
 def opponent(player):
-        if player == PLAYER1:
-            return PLAYER2
+        if player == PLAYER_X:
+            return PLAYER_O
         else:
-            return PLAYER1
+            return PLAYER_X
 
 def mark_spot(matrix, player, cursor):
     x = cursor[0]
@@ -65,7 +65,7 @@ def check_winner(matrix):
     for row in range(3):
         for col in range(3):
             mark = matrix[row][col]
-            if mark == PLAYER1 or mark == PLAYER2:
+            if mark == PLAYER_X or mark == PLAYER_O:
                 num_marks += 1
     if num_marks == 9:
         return DRAW
