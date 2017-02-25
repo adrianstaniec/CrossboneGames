@@ -148,91 +148,72 @@ class AI1:
 class AI2:
     def mark_spot(self, matrix, player):
         matrix = np.array(matrix)
-        new_matrix, new_player = win_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-        return random_spot(matrix, player)
+        functions = [win_in_1,
+                     random_spot]
+
+        for f in functions:
+            new_matrix, new_player = f(matrix, player)
+            if new_player != player:
+                return new_matrix, new_player
 
 class AI3:
     def mark_spot(self, matrix, player):
         matrix = np.array(matrix)
 
-        new_matrix, new_player = win_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
+        functions = [win_in_1,
+                     defend_in_1,
+                     random_spot]
 
-        new_matrix, new_player = defend_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        return random_spot(matrix, player)
+        for f in functions:
+            new_matrix, new_player = f(matrix, player)
+            if new_player != player:
+                return new_matrix, new_player
 
 class AI4:
     def mark_spot(self, matrix, player):
         matrix = np.array(matrix)
 
-        new_matrix, new_player = win_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
+        functions = [win_in_1,
+                     defend_in_1,
+                     take_center,
+                     random_spot]
 
-        new_matrix, new_player = defend_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        new_matrix, new_player = take_center(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        return random_spot(matrix, player)
+        for f in functions:
+            new_matrix, new_player = f(matrix, player)
+            if new_player != player:
+                return new_matrix, new_player
 
 class AI5:
     def mark_spot(self, matrix, player):
         matrix = np.array(matrix)
 
-        new_matrix, new_player = win_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
+        functions = [win_in_1,
+                     defend_in_1,
+                     take_center,
+                     take_corner,
+                     random_spot]
 
-        new_matrix, new_player = defend_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        new_matrix, new_player = take_center(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        new_matrix, new_player = take_corner(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        return random_spot(matrix, player)
+        for f in functions:
+            new_matrix, new_player = f(matrix, player)
+            if new_player != player:
+                return new_matrix, new_player
 
 class AI6:
     def mark_spot(self, matrix, player):
         matrix = np.array(matrix)
 
-        # TODO: refactor to a list of functions
-        new_matrix, new_player = win_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
+        functions = [win_in_1,
+                     defend_in_1,
+                     take_center,
+                     take_corner,
+                     take_side,
+                     random_spot]
 
-        new_matrix, new_player = defend_in_1(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        new_matrix, new_player = take_center(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        new_matrix, new_player = take_corner(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        new_matrix, new_player = take_side(matrix, player)
-        if new_player != player:
-            return new_matrix, new_player
-
-        return random_spot(matrix, player)
+        # TODO refactor more
+        for f in functions:
+            new_matrix, new_player = f(matrix, player)
+            if new_player != player:
+                return new_matrix, new_player
 
 def Factory(level):
     factory = [AI0, AI1, AI2, AI3, AI4, AI5, AI6]
