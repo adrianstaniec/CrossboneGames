@@ -2,16 +2,14 @@ from random import randrange
 import numpy as np
 from backend import model
 
-NUM = 7
-
-def first_empty_slot(matrix, player):
+def first_from_left(matrix, player):
     for y in range(3):
         for x in range(3):
             if matrix[x][y] == model.EMPTY:
                 matrix[x][y] = player
                 return (matrix, model.opponent(player))
 
-def random_spot(matrix, player):
+def random(matrix, player):
     while True:
         guess = randrange(9)
         x = guess // 3
@@ -20,7 +18,7 @@ def random_spot(matrix, player):
             matrix[x][y] = player
             return (matrix, model.opponent(player))
 
-def complete(line, player):
+def __win(line, player):
     done = False
     line = list(line)
     num_player_spots = line.count(player)
@@ -30,7 +28,7 @@ def complete(line, player):
         done = True
     return done, line
 
-def block(line, player):
+def __defend(line, player):
     done = False
     line = list(line)
     num_opponent_spots = line.count(model.opponent(player))
@@ -41,70 +39,40 @@ def block(line, player):
         done = True
     return done, line
 
-def win_in_1(matrix, player):
-    opponent = model.opponent(player)
-    """Seize opportinity to win in 1 move, otherwise random"""
+def __add_third_in_line(matrix, player, win_or_defend):
+    """Look for 2 in line and try to win or defend in 1 move"""
     done = False
     opponent = model.opponent(player)
     # = horizontals
     for row in range(3):
         if not done:
-            done, line = complete(matrix[row,:], player)
+            done, line = win_or_defend(matrix[row,:], player)
             if done:
                 matrix[row,:] = line
                 # || verticals
     for col in range(3):
         if not done:
-            done, line = complete(matrix[:,col], player)
+            done, line = win_or_defend(matrix[:,col], player)
             if done:
                 matrix[:,col] = line
     if not done:
         # \ diagonal
-        done, line = complete(matrix.diagonal(), player)
+        done, line = win_or_defend(matrix.diagonal(), player)
         if done:
             matrix[np.diag_indices(3)] = line
     if not done:
         # / diagonal
-        done, line = complete(np.fliplr(matrix).diagonal(), player)
-        if done:
-            np.fliplr(matrix)[np.diag_indices(3)] = line
-
-    if not done:
-        return matrix, player
-    else:
-        return matrix, opponent
-
-# TODO: refactor: combine with win_in_1()
-def defend_in_1(matrix, player):
-    """Block if opponent has an opportinity to win in 1 move"""
-    done = False
-    opponent = model.opponent(player)
-    # = horizontals
-    for row in range(3):
-        if not done:
-            done, line = block(matrix[row,:], player)
-            if done:
-                matrix[row,:] = line
-                # || verticals
-    for col in range(3):
-        if not done:
-            done, line = block(matrix[:,col], player)
-            if done:
-                matrix[:,col] = line
-    if not done:
-        # \ diagonal
-        done, line = block(matrix.diagonal(), player)
-        if done:
-            matrix[np.diag_indices(3)] = line
-    if not done:
-        # / diagonal
-        done, line = block(np.fliplr(matrix).diagonal(), player)
+        done, line = win_or_defend(np.fliplr(matrix).diagonal(), player)
         if done:
             np.fliplr(matrix)[np.diag_indices(3)] = line
     if not done:
         return matrix, player
     else:
         return matrix, opponent
+
+win_in_1 = lambda matrix, player : __add_third_in_line(matrix, player, __win)
+
+defend_in_1 = lambda matrix, player : __add_third_in_line(matrix, player, __defend)
 
 def take_center(matrix, player):
     if matrix[1,1] == model.EMPTY:
@@ -136,85 +104,30 @@ def take_side(matrix, player):
                 return matrix, opponent
     return matrix, player
 
+class AI:
+    steps = []
 
-class AI0:
-    def mark_spot(self, matrix, player):
-        return first_empty_slot(matrix, player)
+    def __init__(self, steps=[first_from_left]):
+        self.steps = steps
 
-class AI1:
-    def mark_spot(self, matrix, player):
-        return random_spot(matrix, player)
-
-class AI2:
     def mark_spot(self, matrix, player):
         matrix = np.array(matrix)
-        functions = [win_in_1,
-                     random_spot]
-
-        for f in functions:
+        for f in self.steps:
             new_matrix, new_player = f(matrix, player)
             if new_player != player:
                 return new_matrix, new_player
 
-class AI3:
-    def mark_spot(self, matrix, player):
-        matrix = np.array(matrix)
 
-        functions = [win_in_1,
-                     defend_in_1,
-                     random_spot]
-
-        for f in functions:
-            new_matrix, new_player = f(matrix, player)
-            if new_player != player:
-                return new_matrix, new_player
-
-class AI4:
-    def mark_spot(self, matrix, player):
-        matrix = np.array(matrix)
-
-        functions = [win_in_1,
-                     defend_in_1,
-                     take_center,
-                     random_spot]
-
-        for f in functions:
-            new_matrix, new_player = f(matrix, player)
-            if new_player != player:
-                return new_matrix, new_player
-
-class AI5:
-    def mark_spot(self, matrix, player):
-        matrix = np.array(matrix)
-
-        functions = [win_in_1,
-                     defend_in_1,
-                     take_center,
-                     take_corner,
-                     random_spot]
-
-        for f in functions:
-            new_matrix, new_player = f(matrix, player)
-            if new_player != player:
-                return new_matrix, new_player
-
-class AI6:
-    def mark_spot(self, matrix, player):
-        matrix = np.array(matrix)
-
-        functions = [win_in_1,
-                     defend_in_1,
-                     take_center,
-                     take_corner,
-                     take_side,
-                     random_spot]
-
-        # TODO refactor more
-        for f in functions:
-            new_matrix, new_player = f(matrix, player)
-            if new_player != player:
-                return new_matrix, new_player
+__algorithms = {0 : [first_from_left],
+                1 : [random],
+                2 : [win_in_1, random],
+                3 : [win_in_1, defend_in_1, random],
+                4 : [win_in_1, defend_in_1, take_center, random],
+                5 : [win_in_1, defend_in_1, take_center, take_side, random],
+                6 : [win_in_1, defend_in_1, take_center, take_corner, take_side, random]}
 
 def Factory(level):
-    factory = [AI0, AI1, AI2, AI3, AI4, AI5, AI6]
-    return factory[level]()
+    return AI(__algorithms[level])
+
+
+NUM = len(__algorithms)
