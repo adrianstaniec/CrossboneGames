@@ -8,6 +8,7 @@ import argparse
 from backend import model
 from backend import ai
 
+# render text
 
 class View:
     SIZE = 600
@@ -21,9 +22,10 @@ class View:
 
     def __init__(self):
         pygame.init()
+        self.font = pygame.font.SysFont("Verdana", 18)
         self.screen = pygame.display.set_mode((self.SIZE, self.SIZE))
 
-    def draw_board(self, matrix):
+    def draw_board(self, matrix, stats):
         self.screen.fill(0) #clear screen
         self.screen.blit(self.board, (0, 0))
         for x in range(3):
@@ -31,6 +33,13 @@ class View:
                 if matrix[x][y] != model.EMPTY:
                     self.screen.blit(self.markers[matrix[x][y]],
                                      (30+200*y, 30+200*x))
+        text_color = (255,255,100)
+        label_x = self.font.render("x:{}".format(stats['x']), 1, text_color)
+        label_o = self.font.render("o:{}".format(stats['o']), 1, text_color)
+        label_d = self.font.render("=:{}".format(stats['=']), 1, text_color)
+        self.screen.blit(label_x, ( 10, 575))
+        self.screen.blit(label_d, (285, 575))
+        self.screen.blit(label_o, (560, 575))
 
     def draw_cursor(self, player, cursor):
         x = cursor[0]
@@ -75,7 +84,7 @@ if __name__ == "__main__":
 
     while True: # game loop
         state = model.State(starting_player)
-        view.draw_board(state.matrix)
+        view.draw_board(state.matrix, stats)
         view.draw_cursor(state.player, state.cursor)
 
         while True: # move loop
@@ -96,7 +105,7 @@ if __name__ == "__main__":
                                                                      state.cursor)
                         state.winner = model.check_winner(state.matrix)
                         if state.winner != model.NOONE:
-                            view.draw_board(state.matrix)
+                            view.draw_board(state.matrix, stats)
                             break
 
                 if event.key == pygame.K_LEFT or event.key == pygame.K_h:
@@ -113,10 +122,10 @@ if __name__ == "__main__":
                                                            state.player)
                 state.winner = model.check_winner(state.matrix)
                 if state.winner != model.NOONE:
-                    view.draw_board(state.matrix)
+                    view.draw_board(state.matrix, stats)
                     break
 
-            view.draw_board(state.matrix)
+            view.draw_board(state.matrix, stats)
             view.draw_cursor(state.player, state.cursor)
 
         if abort:
