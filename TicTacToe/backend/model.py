@@ -1,8 +1,7 @@
 import numpy as np
 
 
-EMPTY = ' '
-NOONE = ' '
+EMPTY = NOONE = ' '
 PLAYER1 = 'X'
 PLAYER2 = 'O'
 DRAW = '='
@@ -10,6 +9,7 @@ DRAW = '='
 class State:
     def __init__(self, player=PLAYER1):
         self.player = player
+        self.winner = NOONE
         self.cursor = (1, 1)
         self.matrix = [[EMPTY, EMPTY, EMPTY],
                        [EMPTY, EMPTY, EMPTY],
