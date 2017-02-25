@@ -43,19 +43,23 @@ def check_winner(matrix):
     for row in range(3):
         if matrix[row][0] == matrix[row][1]:
             if matrix[row][1] == matrix[row][2]:
-                return matrix[row][0]
+                if matrix[row][0] != NOONE:
+                    return matrix[row][0]
     # verticals
     for col in range(3):
         if matrix[0][col] == matrix[1][col]:
             if matrix[1][col] == matrix[2][col]:
-                return matrix[0][col]
+                if matrix[0][col] != NOONE:
+                    return matrix[0][col]
     # diagonals
     if matrix[0][0] == matrix[1][1]:
         if matrix[1][1] == matrix[2][2]:
-            return matrix[1][1]
+            if matrix[1][1] != NOONE:
+                return matrix[1][1]
     if matrix[2][0] == matrix[1][1]:
         if matrix[1][1] == matrix[0][2]:
-            return matrix[1][1]
+            if matrix[1][1] != NOONE:
+                return matrix[1][1]
     # draw
     num_marks = 0
     for row in range(3):
