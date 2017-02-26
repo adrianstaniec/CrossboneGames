@@ -6,7 +6,7 @@ Simple games in python
 Game                     | Status
 -------------------------|--------------------
 TicTacToe                | :white_check_mark:
-FourInLine               | :x:
+ConnectFour              | :white_check_mark:
 Checkers                 | :x:
 Reversi                  | :x:
 Chess                    | :x:
@@ -28,3 +28,15 @@ AI6 (side preference)    | :white_check_mark:
 AI competition           | :white_check_mark:
 AI7 (supervised)         | :x:
 AI8 (reinforced)         | :x:
+
+
+### ConnectFour
+
+Function                 | Status
+-------------------------|--------------------
+Dual player              | :white_check_mark:
+Single player            | :white_check_mark:
+AI0 (first empty)        | :white_check_mark:
+AI1 (random empty)       | :white_check_mark:
+AI2 (win in 1)           | :x:
+AI3 (defend in 1)        | :x:
