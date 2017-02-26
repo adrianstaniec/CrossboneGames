@@ -1,0 +1,7 @@
+# Compiled
+__pycache__/
+*.py[cod]
+
+# IDEs
+.cache/
+.vscode/
