@@ -1,4 +1,4 @@
-from random import randrange
+import random
 import numpy as np
 from backend import model
 
@@ -9,9 +9,9 @@ def first_from_left(matrix, player):
                 matrix[x][y] = player
                 return (matrix, model.opponent(player))
 
-def random(matrix, player):
+def random_pick(matrix, player):
     while True:
-        guess = randrange(9)
+        guess = random.randrange(9)
         x = guess // 3
         y = guess % 3
         if matrix[x][y] == model.EMPTY:
@@ -82,8 +82,8 @@ def take_center(matrix, player):
 
 def take_corner(matrix, player):
     opponent = model.opponent(player)
-    for row in [0,2]:
-        for col in [0,2]:
+    for row in random.sample([0, 2], 2):
+        for col in random.sample([0, 2], 2):
             if matrix[row,col] == model.EMPTY:
                 if matrix[row,1] == opponent or matrix[1,col] == opponent:
                     matrix[row,col] = player
@@ -92,16 +92,16 @@ def take_corner(matrix, player):
 
 def take_side(matrix, player):
     opponent = model.opponent(player)
-    for row, col in [(0, 1), (2, 1)]:
+    for row, col in random.sample([(0, 1), (2, 1), (1, 0), (1, 2)], 4):
         if matrix[row,col] == model.EMPTY:
-            if matrix[row,0] == opponent or matrix[row,2] == opponent:
-                matrix[row,col] = player
-                return matrix, opponent
-    for row, col in [(1, 0), (1, 2)]:
-        if matrix[row,col] == model.EMPTY:
-            if matrix[0,col] == opponent or matrix[2,col] == opponent:
-                matrix[row,col] = player
-                return matrix, opponent
+            if col == 1:
+                if matrix[row,0] == opponent or matrix[row,2] == opponent:
+                    matrix[row,col] = player
+                    return matrix, opponent
+            else:
+                if matrix[0,col] == opponent or matrix[2,col] == opponent:
+                    matrix[row,col] = player
+                    return matrix, opponent
     return matrix, player
 
 class AI:
@@ -119,15 +119,14 @@ class AI:
 
 
 __algorithms = {0 : [first_from_left],
-                1 : [random],
-                2 : [win_in_1, random],
-                3 : [win_in_1, defend_in_1, random],
-                4 : [win_in_1, defend_in_1, take_center, random],
-                5 : [win_in_1, defend_in_1, take_center, take_side, random],
-                6 : [win_in_1, defend_in_1, take_center, take_corner, take_side, random]}
+                1 : [random_pick],
+                2 : [win_in_1, random_pick],
+                3 : [win_in_1, defend_in_1, random_pick],
+                4 : [win_in_1, defend_in_1, take_center, random_pick],
+                5 : [win_in_1, defend_in_1, take_center, take_side, random_pick],
+                6 : [win_in_1, defend_in_1, take_center, take_corner, take_side, random_pick]}
 
 def Factory(level):
     return AI(__algorithms[level])
-
 
 NUM = len(__algorithms)
