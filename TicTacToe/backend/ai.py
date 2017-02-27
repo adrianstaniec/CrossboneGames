@@ -107,14 +107,15 @@ def take_side(matrix, player):
 class AI:
     steps = []
 
-    def __init__(self, steps=[first_from_left]):
+    def __init__(self, player, steps=[first_from_left]):
+        self.player = player
         self.steps = steps
 
-    def mark_spot(self, matrix, player):
+    def mark_spot(self, matrix):
         matrix = np.array(matrix)
         for f in self.steps:
-            new_matrix, new_player = f(matrix, player)
-            if new_player != player:
+            new_matrix, new_player = f(matrix, self.player)
+            if new_player != self.player:
                 return new_matrix, new_player
 
 
@@ -126,7 +127,7 @@ __algorithms = {0 : [first_from_left],
                 5 : [win_in_1, defend_in_1, take_center, take_side, random_pick],
                 6 : [win_in_1, defend_in_1, take_center, take_corner, take_side, random_pick]}
 
-def Factory(level):
-    return AI(__algorithms[level])
+def Factory(player, level):
+    return AI(player, __algorithms[level])
 
 NUM = len(__algorithms)

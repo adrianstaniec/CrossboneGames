@@ -10,33 +10,15 @@ class State:
     def __init__(self, player=PLAYER_X):
         self.player = player
         self.winner = NOONE
-        self.cursor = np.array([1, 1])
         self.matrix = np.array([[EMPTY, EMPTY, EMPTY],
                                 [EMPTY, EMPTY, EMPTY],
                                 [EMPTY, EMPTY, EMPTY]])
-
-def move_cursor(pos, vec):
-    pos = np.array(pos)
-    vec = np.array(vec)
-    new_pos = pos + vec
-    if new_pos[0] >= 0 and new_pos[0] <= 2:
-        if new_pos[1] >= 0 and new_pos[1] <= 2:
-            return tuple(new_pos)
-    return tuple(pos)
 
 def opponent(player):
         if player == PLAYER_X:
             return PLAYER_O
         else:
             return PLAYER_X
-
-def mark_spot(matrix, player, cursor):
-    x = cursor[0]
-    y = cursor[1]
-    if matrix[x][y] == EMPTY:
-        matrix[x][y] = player
-        player = opponent(player)
-    return (matrix, player)
 
 def check_winner(matrix):
     # horizontals
