@@ -40,12 +40,12 @@ if __name__ == "__main__":
             charts[a][b] = [0,0,0]
 
 
-    print("\n --- Win/Loss ratios ---")
+    # print("\n --- Win/Loss ratios ---")
     df = pd.DataFrame(numbers)
     # df = df.rename(lambda x: x + 1)
     # df = df.rename(columns=lambda x: x+1)
     # df = df.iloc[::-1]
-    print(df)
+    # print(df)
 
     print("\n --- Win/Loss ratios ---")
     df = pd.DataFrame(strings)
@@ -55,10 +55,10 @@ if __name__ == "__main__":
     print(df)
 
 
-    print("\n --- [Loss, Win, Draw] ---")
+    # print("\n --- [Loss, Win, Draw] ---")
     df = pd.DataFrame(charts)
     # df = df.rename(lambda x: x + 1)
     # df = df.rename(columns=lambda x: x+1)
-    print(df)
+    # print(df)
 
     plt.imshow(charts, interpolation='nearest')
