@@ -1,18 +1,18 @@
-"""TicTacToe.
+"""Competition - plays round-robin tournament for all algorithms
 """
-
 import argparse
 import numpy as np
 
-import match
 from backend import ai
 from backend import model
+import match
 
 import pandas as pd
 import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("-n", type=int, default=100,
                         help="number of matches")
     args = parser.parse_args()
@@ -27,13 +27,13 @@ if __name__ == "__main__":
 
     for a in range(ai.NUM):
         for b in range(a+1):
-            summary = match.play(a, b, NUM_GAMES)
-            strings[a,b] = "{}/{}".format(summary[model.PLAYER_X], summary[model.PLAYER_O])
-            charts[a][b] = [summary[model.PLAYER_O]/NUM_GAMES,
-                            summary[model.PLAYER_X]/NUM_GAMES,
-                            summary[model.DRAW]/NUM_GAMES]
+            stats = match.play_multiple(a, b, NUM_GAMES)
+            strings[a,b] = "{}/{}".format(stats[model.PLAYER_X], stats[model.PLAYER_O])
+            charts[a][b] = [stats[model.PLAYER_O]/NUM_GAMES,
+                            stats[model.PLAYER_X]/NUM_GAMES,
+                            stats[model.DRAW]/NUM_GAMES]
             try:
-                numbers[a,b] = summary[model.PLAYER_X] / summary[model.PLAYER_O]
+                numbers[a,b] = stats[model.PLAYER_X] / stats[model.PLAYER_O]
             except:
                 numbers[a,b] = float('Inf')
         for b in range(a+1, ai.NUM):
