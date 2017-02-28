@@ -13,8 +13,7 @@ import matplotlib.pyplot as plt
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("-n", type=int, default=100,
-                        help="number of matches")
+    parser.add_argument("-n", type=int, default=100, help="number of matches")
     args = parser.parse_args()
 
     NUM_GAMES = args.n
@@ -22,7 +21,6 @@ if __name__ == "__main__":
     numbers = np.empty((ai.NUM, ai.NUM), dtype='float')
     numbers[:] = np.nan
     strings = np.empty((ai.NUM, ai.NUM), dtype='object')
-    # charts  = np.empty((ai.NUM, ai.NUM), dtype='object')
     charts = [[[] for _ in range(ai.NUM)] for _ in range(ai.NUM)]
 
     for a in range(ai.NUM):
@@ -33,15 +31,15 @@ if __name__ == "__main__":
                             stats[model.PLAYER_X]/NUM_GAMES,
                             stats[model.DRAW]/NUM_GAMES]
             try:
-                numbers[a,b] = stats[model.PLAYER_X] / stats[model.PLAYER_O]
+                numbers[a, b] = stats[model.PLAYER_X] / stats[model.PLAYER_O]
             except:
-                numbers[a,b] = float('Inf')
+                numbers[a, b] = float('Inf')
         for b in range(a+1, ai.NUM):
-            charts[a][b] = [0,0,0]
+            charts[a][b] = [0, 0, 0]
 
 
     # print("\n --- Win/Loss ratios ---")
-    df = pd.DataFrame(numbers)
+    # df = pd.DataFrame(numbers)
     # df = df.rename(lambda x: x + 1)
     # df = df.rename(columns=lambda x: x+1)
     # df = df.iloc[::-1]

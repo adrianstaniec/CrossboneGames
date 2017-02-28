@@ -1,10 +1,10 @@
 import numpy as np
 
-
 EMPTY = NOONE = ' '
 PLAYER_X = 'x'
 PLAYER_O = 'o'
 DRAW = '='
+
 
 class State:
     def __init__(self, player=PLAYER_X):
@@ -14,11 +14,13 @@ class State:
                                 [EMPTY, EMPTY, EMPTY],
                                 [EMPTY, EMPTY, EMPTY]])
 
+
 def opponent(player):
-        if player == PLAYER_X:
-            return PLAYER_O
-        else:
-            return PLAYER_X
+    if player == PLAYER_X:
+        return PLAYER_O
+    else:
+        return PLAYER_X
+
 
 def check_winner(matrix):
     # horizontals
