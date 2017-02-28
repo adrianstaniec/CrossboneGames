@@ -2,8 +2,9 @@
 
 ## Usage
 
+```bash
 python connectfour.py -h
-
+```
 
 ## Roadmap
 

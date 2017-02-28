@@ -2,8 +2,17 @@
 
 ## Usage
 
+```bash
 python tictactoe.py -h
+```
 
+```bash
+python match.py -h
+```
+
+```bash
+python competition.py -h
+```
 
 ## Roadmap
 
@@ -19,5 +28,5 @@ AI4 (center preference)  | :white_check_mark:
 AI5 (corner preference)  | :white_check_mark:
 AI6 (side preference)    | :white_check_mark:
 AI competition           | :white_check_mark:
-AI7 (supervised)         | :x:
-AI8 (reinforced)         | :x:
+AI7 (reinforced)         | :construction:
+AI8 (supervised)         | :x:
