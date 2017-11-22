@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 """Competition - plays round-robin tournament for all algorithms
 """
 import argparse
